@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ShopKaspiResource\Pages;
-use App\Filament\Resources\ShopKaspiResource\RelationManagers;
-use App\Models\ShopKaspi;
+use App\Filament\Resources\CustomerTenderResource\Pages;
+use App\Filament\Resources\CustomerTenderResource\RelationManagers;
+use App\Models\Tender\Customer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,12 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ShopKaspiResource extends Resource
+class CustomerTenderResource extends Resource
 {
-    protected static ?string $model = ShopKaspi::class;
+    protected static ?string $model = Customer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationLabel = 'Заказщик';
+    protected static ?string $navigationGroup = 'Тендер';
     public static function form(Form $form): Form
     {
         return $form
@@ -34,17 +35,14 @@ class ShopKaspiResource extends Resource
                 //
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -59,18 +57,9 @@ class ShopKaspiResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListShopKaspis::route('/'),
-            'create' => Pages\CreateShopKaspi::route('/create'),
-            'view' => Pages\ViewShopKaspi::route('/{record}'),
-            'edit' => Pages\EditShopKaspi::route('/{record}/edit'),
+            'index' => Pages\ListCustomerTenders::route('/'),
+            'create' => Pages\CreateCustomerTender::route('/create'),
+            'edit' => Pages\EditCustomerTender::route('/{record}/edit'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }
